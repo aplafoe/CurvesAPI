@@ -1,15 +1,12 @@
-#pragma once
-#ifdef CURVES_EXPORTS
-#define CURVES_API __declspec(dllexport)
-#else
-#define CURVES_API __declspec(dllimport)
-#endif
+#ifndef CURVES_LIB
+#define CURVES_LIB
 
 #include <compare>
-#include <math.h>
+#include <cmath>
+#include <iostream>
 #include <memory>
 
-class CURVES_API Point3D {
+class Point3D {
 public:
     constexpr Point3D(double x, double y, double z) noexcept;
 
@@ -37,7 +34,7 @@ private:
     double Z = 0;
 };
 
-class CURVES_API Vector3D {
+class Vector3D {
 public:
 
     constexpr Vector3D(double x, double y, double z) noexcept;
@@ -64,16 +61,15 @@ private:
     double Z = 0;
 };
 
-class CURVES_API ICurve {
+class ICurve {
 public:
     virtual Point3D getPoint(double t) const noexcept = 0;
     virtual Vector3D getDerivative(double t) const noexcept = 0;
-    virtual double getRadiusX() const noexcept = 0;
-    virtual double getRadiusY() const noexcept = 0;
+    virtual double getRadius() const noexcept = 0;
     virtual ~ICurve() = default;
 };
 
-class CURVES_API Circle final : public ICurve{
+class Circle final : public ICurve{
 public:
 
     explicit Circle(double _radius) noexcept;
@@ -90,9 +86,7 @@ public:
 
     Vector3D getDerivative(double t) const noexcept override final;
 
-    double getRadiusX() const noexcept override final;
-
-    double getRadiusY() const noexcept override final;
+    double getRadius() const noexcept override final;
 
     ~Circle() override = default;
 
@@ -100,7 +94,7 @@ private:
     double radius = 0;
 };
 
-class CURVES_API Ellipse final : public ICurve{
+class Ellipse final : public ICurve{
 public:
 
     explicit Ellipse(double radius_x, double radius_y) noexcept;
@@ -117,9 +111,9 @@ public:
 
     Vector3D getDerivative(double t) const noexcept override final;
 
-    double getRadiusX() const noexcept override final;
+    double getRadius() const noexcept override final;
 
-    double getRadiusY() const noexcept override final;
+    double getRadiusY() const noexcept;
 
     ~Ellipse() override = default;
 
@@ -129,7 +123,7 @@ private:
 
 };
 
-class CURVES_API Helix final : public ICurve{
+class Helix final : public ICurve{
 public:
 
     explicit Helix(double _radius, double _step) noexcept;
@@ -146,9 +140,7 @@ public:
 
     Vector3D getDerivative(double t) const noexcept override final;
 
-    double getRadiusX() const noexcept override final;
-
-    double getRadiusY() const noexcept override final;
+    double getRadius() const noexcept override final;
 
     ~Helix() override = default;
 
@@ -156,3 +148,5 @@ private:
     double radius = 0;
     double step = 0;
 };
+
+#endif
